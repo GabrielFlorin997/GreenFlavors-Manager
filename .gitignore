@@ -1,14 +1,14 @@
-# Fișierele compilate (nu avem nevoie de ele pe GitHub)
+# Compiled files (not needed on GitHub)
 out/
 *.class
 
-# Setările specifice IntelliJ (opțional, dar recomandat)
+# IntelliJ IDEA specific settings
 .idea/
 *.iml
 
-# Fișiere de sistem
+# System files
 .DS_Store
 Thumbs.db
 
-# Date sensibile (dacă ai fișiere cu parole)
+# Sensitive data
 password.txt
