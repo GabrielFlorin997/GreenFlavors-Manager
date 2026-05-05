@@ -66,24 +66,23 @@ public void dispatchProduct(String areaId, Product p) {
     WarehouseArea area = warehouseArea.get(areaId);
 
     if (area == null){
-        System.out.println(areaId+" nu a fost gasit!");
+        System.out.println("Eroare: Zona "+areaId+" nu a fost gasita!");
         return;
     }
-
 
     //check if areaId exists in the product or warehousearea hasmap
-    if (!warehouseArea.containsKey(areaId)) {
-        System.out.println(areaId + " nu a fost gasit!");
-        return;
-    }
     if (area instanceof Storable) {
         Storable storableArea = (Storable) area;
         try {
             storableArea.storeProduct(p);
-           inventoryService.updateProductArea(p.getId(),areaId);
-        } catch (StorageException e) {
-            System.out.println(e.getMessage());
+            //update DB
+            inventoryService.updateProductArea(p.getId(),areaId);
+        }catch (StorageException e){
+            System.out.println("Eroare stocare: "+e.getMessage());
         }
+
+    }else {
+        System.out.println("Zona "+areaId+" nu este destinata depozitarii");
     }
 }
 
@@ -114,5 +113,10 @@ public void printLowStockProducts(){
         System.out.println("Toate produsele au stoc suficient.");
     }
 }
+
+//process sale
+    public void sellProduct(int productId, int quantity){
+        inventoryService.processSale(productId,quantity);
+    }
 
 }

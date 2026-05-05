@@ -16,6 +16,8 @@ public class ConsoleMenu {
     //-CREATE SCANNER-
     private Scanner scanner = new Scanner(System.in);
     private AuthService authService = new AuthService();
+    //we create a single instance that we reuse
+    private InventoryService dbService = new InventoryService();
 
 
     //-CONSTRUCTOR-
@@ -63,7 +65,8 @@ public class ConsoleMenu {
             System.out.println("6.Afiseaza produse scoase de la vanzare");
             System.out.println("7.Actualizare Pret & Stoc");
             System.out.println("8.Verifica Stoc Critic");
-            System.out.println("9.Iesire");
+            System.out.println("9.Emitere Bon");
+            System.out.println("10.Iesire");
 
             int choiceOption = -1;
             //-CHOICE OPTION-
@@ -84,8 +87,7 @@ public class ConsoleMenu {
                     break;
 
                 case 3:
-                    InventoryService dbServiceForDisplay = new InventoryService();
-                    dbServiceForDisplay.displayInventory();
+                    dbService.displayInventory();
                     //manager.displayInventory();
                     break;
 
@@ -98,8 +100,7 @@ public class ConsoleMenu {
                     break;
 
                 case 6:
-                    InventoryService dvServiceForDeleteProduct = new InventoryService();
-                    dvServiceForDeleteProduct.showDeleteProduct();
+                    dbService.showDeleteProduct();
                     break;
                 case 7:
                     updateProduct();
@@ -108,6 +109,9 @@ public class ConsoleMenu {
                     manager.printLowStockProducts();
                     break;
                 case 9:
+                    processSale();
+                    break;
+                case 10:
                     System.out.println("La revedere");
                     return;
                 default:
@@ -142,8 +146,8 @@ public class ConsoleMenu {
          Product newProduct = new Product(nameProduct,priceOfProduct,stockOfProduct,needsCold);
 
             //we save it in the DB and get the real Id
-            InventoryService dvService = new InventoryService();
-            int generatedId = dvService.saveProduct(newProduct.getName(), newProduct.getPrice(), newProduct.getStock(), newProduct.isNeedsColdStorage());
+
+            int generatedId = dbService.saveProduct(newProduct.getName(), newProduct.getPrice(), newProduct.getStock(), newProduct.isNeedsColdStorage());
             //update the ID in the Java object
             if (generatedId != -1){
                 newProduct.setId(generatedId);
@@ -158,8 +162,7 @@ public class ConsoleMenu {
     private void handleDeleteProduct(){
         System.out.println("Introdu ID-ul produsului pe care il doresti sa il stergi: ");
         int deleteProductId = Integer.parseInt(scanner.nextLine());
-        InventoryService dvService = new InventoryService();
-        dvService.deleteProduct(deleteProductId);
+        dbService.deleteProduct(deleteProductId);
     }
 
     private void updateProduct(){
@@ -169,8 +172,7 @@ public class ConsoleMenu {
        double newPrice =  Double.parseDouble(scanner.nextLine());
         System.out.println("Introdu noul stoc: ");
         int updateStock = Integer.parseInt(scanner.nextLine());
-        InventoryService dv = new InventoryService();
-        dv.updateProduct(updateProductId,newPrice,updateStock);
+        dbService.updateProduct(updateProductId,newPrice,updateStock);
     }
 
     //ADD STORAGE AREA
@@ -244,6 +246,13 @@ public class ConsoleMenu {
             }
             manager.dispatchProduct(areaiD, foundProduct);
 
+        }
+        private void processSale(){
+            System.out.println("Id produs:");
+            int productId = Integer.parseInt(scanner.nextLine());
+            System.out.println("Cantitate:");
+            int quantity = Integer.parseInt(scanner.nextLine());
+            manager.sellProduct(productId,quantity);
         }
 
 

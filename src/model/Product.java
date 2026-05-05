@@ -14,17 +14,18 @@ public class Product {
         this.name = name;
         this.price = price;
         this.stock = stock;
-        this.needsColdStorage=needsColdStorage;
+        this.needsColdStorage = needsColdStorage;
     }
 
 
     //CONSTRUCTOR FOR NEW GOODS
-    public Product(String name, double price, int stock, boolean needsColdStorage){
-        this.name=name;
-        this.price=price;
-        this.stock=stock;
-        this.needsColdStorage=needsColdStorage;
+    public Product(String name, double price, int stock, boolean needsColdStorage) {
+        this.name = name;
+        this.price = price;
+        this.stock = stock;
+        this.needsColdStorage = needsColdStorage;
     }
+
     //-GETTERS-
     public int getId() {
         return this.id;
@@ -42,7 +43,7 @@ public class Product {
         return this.stock;
     }
 
-    public boolean isNeedsColdStorage(){
+    public boolean isNeedsColdStorage() {
         return this.needsColdStorage;
     }
 
@@ -70,7 +71,20 @@ public class Product {
             this.stock = stock;
         }
     }
-    //-INTERFACE STORABLE-
+
+    //IMPLEMENT EQUALS & HASHCODE
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return id == product.id; //two products are equal if they have the same UD
+
+    }
+    @Override
+    public int hashCode(){
+        return java.util.Objects.hash(id);
+    }
 
 
 }
